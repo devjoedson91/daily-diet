@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-import Header from "./components/header";
-import StatisticCard from "./components/statistic-card";
+import Header from "../components/header";
+import StatisticCard from "../components/statistic-card";
 
-export default function Statistics() {
+export default function Dashboard() {
   return (
     <div className="bg-green-light flex flex-col h-screen w-full">
       <Header />
@@ -11,6 +11,7 @@ export default function Statistics() {
           <h1 className="text-center text-base font-bold">
             Estatísticas gerais
           </h1>
+
           <div className="grid grid-cols-1 grid-rows-3 gap-4 h-3/4">
             <StatisticCard
               className="bg-gray-6"

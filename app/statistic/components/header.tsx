@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <div className="flex flex-col h-36 justify-center items-center relative">
       <div className="absolute top-5 left-5">
-        <Link href="#">
+        <Link href="/statistic">
           <ChevronLeft size={24} />
         </Link>
       </div>

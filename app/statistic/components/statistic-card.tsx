@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface CardProps {
