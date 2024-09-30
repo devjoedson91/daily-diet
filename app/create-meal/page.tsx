@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ButtonSelect from "./components/ButtonSelect";
 import { CircleCheck, CircleX } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
@@ -31,6 +32,8 @@ const formSchema = z.object({
 });
 
 export default function CreateMeal() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -45,6 +48,8 @@ export default function CreateMeal() {
 
   function handleSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
+
+    router.push(`/create-meal/done/${data.isWithinDiet}`);
   }
 
   function handleSelected() {
