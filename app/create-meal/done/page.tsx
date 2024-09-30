@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Illustration1 from "@/assets/illustration1.svg";
 import Illustration2 from "@/assets/illustration2.svg";
@@ -11,9 +12,13 @@ export default function Done() {
 
   const searchParams = useSearchParams();
 
-  const isWithinDiet = JSON.parse(
-    searchParams.get("isWithinDiet") || ""
-  ) as boolean;
+  const search = searchParams.get("isWithinDiet");
+
+  const [isWithinDiet, setIsWithinDiet] = useState(false);
+
+  useEffect(() => {
+    setIsWithinDiet(JSON.parse(search || ""));
+  }, []);
 
   function handleNavigation() {
     router.push("/statistic");
