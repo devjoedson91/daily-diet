@@ -20,12 +20,29 @@ import { z } from "zod";
 import ButtonSelect from "./components/ButtonSelect";
 import { CircleCheck, CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { formatToDate, formatToTime } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
-  description: z.string({ message: "Descreva brevemente a refeição" }),
-  date: z.string({ message: "Informe a data da dieta" }),
-  hour: z.string({ message: "Informe a hora da dieta" }),
+  description: z
+    .string({ message: "Descreva brevemente a refeição" })
+    .min(1, { message: "Descreva brevemente a refeição" }),
+  date: z
+    .string({ message: "Informe a data da refeição" })
+    .min(1, { message: "Informe a data da refeição" })
+    .max(10, { message: "Data inválida" })
+    .regex(/^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/, {
+      message:
+        "Formato inválido. Use o formato DD/MM/AAAA com dias, meses e anos válidos",
+    }),
+  hour: z
+    .string({ message: "Informe a hora da refeição" })
+    .min(1, { message: "Informe a hora da refeição" })
+    .max(5, { message: "Hora inválida" })
+    .regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/, {
+      message:
+        "Formato inválido. Use o formato HH:MM com horas de 00 a 23 e minutos de 00 a 59",
+    }),
   isWithinDiet: z.boolean({
     message: "Selecione se a refeição está dentro da dieta",
   }),
@@ -36,20 +53,33 @@ export default function CreateMeal() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      hour: "",
+      date: "",
+    },
   });
 
-  const { setValue } = form;
+  const { setValue, watch } = form;
 
   const [isWithinDiet, setIsWithinDiet] = useState(true);
+
+  const hour = watch("hour");
+  const date = watch("date");
 
   useEffect(() => {
     setValue("isWithinDiet", isWithinDiet);
   }, [isWithinDiet]);
 
-  function handleSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  useEffect(() => {
+    setValue("hour", formatToTime(hour));
+  }, [hour]);
 
-    router.push(`/create-meal/done/${data.isWithinDiet}`);
+  useEffect(() => {
+    setValue("date", formatToDate(date));
+  }, [date]);
+
+  function handleSubmit(data: z.infer<typeof formSchema>) {
+    router.push(`/create-meal/done?isWithinDiet=${data.isWithinDiet}`);
   }
 
   function handleSelected() {
@@ -104,7 +134,7 @@ export default function CreateMeal() {
                     <FormItem>
                       <FormLabel className="text-sm font-bold">Data</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} maxLength={10} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -117,7 +147,7 @@ export default function CreateMeal() {
                     <FormItem>
                       <FormLabel className="text-sm font-bold">Hora</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} maxLength={5} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

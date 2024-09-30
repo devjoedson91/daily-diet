@@ -4,17 +4,16 @@ import Image from "next/image";
 import Illustration1 from "@/assets/illustration1.svg";
 import Illustration2 from "@/assets/illustration2.svg";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-interface DoneParams {
-  params: {
-    isWithinDiet: boolean;
-  };
-}
-
-export default function Done({ params }: DoneParams) {
+export default function Done() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const isWithinDiet = JSON.parse(
+    searchParams.get("isWithinDiet") || ""
+  ) as boolean;
 
   function handleNavigation() {
     router.push("/statistic");
@@ -22,7 +21,7 @@ export default function Done({ params }: DoneParams) {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-8">
-      {params.isWithinDiet === true ? (
+      {isWithinDiet ? (
         <div>
           <h1 className="text-green-dark font-bold text-2xl mb-2 text-center">
             Continue assim!
@@ -45,7 +44,7 @@ export default function Done({ params }: DoneParams) {
 
       <div className="relative w-56 h-72">
         <Image
-          src={params.isWithinDiet === true ? Illustration1 : Illustration2}
+          src={true ? Illustration1 : Illustration2}
           alt="illustration"
           fill
         />
