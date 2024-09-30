@@ -1,10 +1,10 @@
 "use client";
 
-import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Header from "./components/home-header";
 
 export default function Statistic() {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function Statistic() {
         <Label className="text-base text-gray-1 font-bold">Refeições</Label>
         <Button
           variant="outline"
-          className="flex items-center justify-center gap-2 bg-gray-2 w-full h-12 text-white"
+          className="flex items-center justify-center gap-2 bg-gray-2 hover:bg-gray-2/70 w-full h-12 text-white"
           onClick={handleMealNavigation}
         >
           <Plus size={18} />

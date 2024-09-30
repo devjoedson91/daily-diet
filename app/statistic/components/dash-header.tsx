@@ -1,7 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
-export default function Header() {
+export default function DashHeader() {
   return (
     <div className="flex flex-col h-36 justify-center items-center relative">
       <div className="absolute top-5 left-5">

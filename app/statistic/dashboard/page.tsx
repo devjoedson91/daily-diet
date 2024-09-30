@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import Header from "../components/header";
+import Header from "../components/dash-header";
 import StatisticCard from "../components/statistic-card";
 
 export default function Dashboard() {
