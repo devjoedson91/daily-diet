@@ -17,7 +17,7 @@ export default function Done() {
   const [isWithinDiet, setIsWithinDiet] = useState(false);
 
   useEffect(() => {
-    search && setIsWithinDiet(JSON.parse(search as string));
+    search && setIsWithinDiet(JSON.parse(search || ""));
   }, [search]);
 
   function handleNavigation() {
