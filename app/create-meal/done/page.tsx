@@ -17,8 +17,8 @@ export default function Done() {
   const [isWithinDiet, setIsWithinDiet] = useState(false);
 
   useEffect(() => {
-    setIsWithinDiet(JSON.parse(search || ""));
-  }, []);
+    search && setIsWithinDiet(JSON.parse(search));
+  }, [search]);
 
   function handleNavigation() {
     router.push("/statistic");
