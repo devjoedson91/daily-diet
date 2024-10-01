@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./ui/button";
 
 interface ButtonSelectProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   action(): void;
