@@ -6,7 +6,7 @@ import Illustration2 from "@/assets/illustration2.svg";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Done() {
+export default function Feedback() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -44,7 +44,7 @@ export default function Done() {
 
       <div className="relative w-56 h-72">
         <Image
-          src={true ? Illustration1 : Illustration2}
+          src={isWithinDiet ? Illustration1 : Illustration2}
           alt="illustration"
           fill
         />

@@ -48,7 +48,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function CreateMeal() {
+export default function Create() {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
