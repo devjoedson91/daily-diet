@@ -2,6 +2,12 @@ import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { CircleCheck, PencilLine, Trash2 } from "lucide-react";
 
 export default function Meal() {
@@ -31,19 +37,36 @@ export default function Meal() {
           </div>
           <div className="flex flex-col gap-2">
             <Button
-              className="flex items-center bg-gray-2 w-full gap-2 text-white"
+              className="flex items-center bg-gray-2 w-full h-12 gap-2 text-white"
               variant="outline"
             >
               <PencilLine size={18} />
               <h2 className="font-bold text-sm">Editar refeição</h2>
             </Button>
-            <Button
-              className="flex items-center text-gray-2 border w-full gap-2"
-              variant="outline"
-            >
-              <Trash2 size={18} />
-              <h2 className="font-bold text-sm">Excluir refeição</h2>
-            </Button>
+            <Dialog>
+              <DialogTrigger>
+                <div className="flex items-center justify-center text-gray-2 border w-full h-12 rounded-md gap-2">
+                  <Trash2 size={18} />
+                  <h2 className="font-bold text-sm">Excluir refeição</h2>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="bg-white border-none text-gray-2">
+                <h1 className="text-center text-lg font-bold">
+                  Deseja realmente excluir o registro da refeição?
+                </h1>
+                <div className="w-full grid grid-cols-2 grid-rows-1 h-12 gap-4">
+                  <DialogClose className="rounded-md border text-sm font-bold">
+                    Cancelar
+                  </DialogClose>
+                  <Button
+                    variant="outline"
+                    className="bg-gray-2 hover:bg-gray-2/70 h-full text-white text-sm font-bold"
+                  >
+                    Sim, excluir
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
       </Card>
