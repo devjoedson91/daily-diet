@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,8 +11,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CircleCheck, PencilLine, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Meal() {
+  const router = useRouter();
+
+  function handleNavigation() {
+    router.push("/meal/update");
+  }
+
   return (
     <div className="flex flex-col bg-green-light h-screen">
       <Header title="Refeição" />
@@ -39,6 +48,7 @@ export default function Meal() {
             <Button
               className="flex items-center bg-gray-2 w-full h-12 gap-2 text-white"
               variant="outline"
+              onClick={handleNavigation}
             >
               <PencilLine size={18} />
               <h2 className="font-bold text-sm">Editar refeição</h2>

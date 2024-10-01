@@ -45,21 +45,40 @@ export const formSchema = z.object({
   }),
 });
 
+export interface MealProps {
+  name: string;
+  description: string;
+  date: string;
+  hour: string;
+  isWithinDiet: boolean;
+}
+
 interface MealFormProps {
   handleSubmit(data: z.infer<typeof formSchema>): void;
   method: "post" | "put";
+  mealData?: MealProps;
 }
 
-export default function MealForm({ handleSubmit, method }: MealFormProps) {
+export default function MealForm({
+  handleSubmit,
+  method,
+  mealData,
+}: MealFormProps) {
+  const defaultValues = mealData
+    ? mealData
+    : {
+        hour: "",
+        date: "",
+      };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      hour: "",
-      date: "",
-    },
+    defaultValues,
   });
 
-  const [isWithinDiet, setIsWithinDiet] = useState(true);
+  const [isWithinDiet, setIsWithinDiet] = useState(
+    mealData ? mealData.isWithinDiet : true
+  );
 
   const { setValue, watch } = form;
 
