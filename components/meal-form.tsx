@@ -18,6 +18,9 @@ import ButtonSelect from "./button-select";
 import { CircleCheck, CircleX } from "lucide-react";
 import { Button } from "./ui/button";
 import { formatToDate, formatToTime } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { CreateMealParams, createMeal } from "@/actions/create-meal";
+import { toast } from "sonner";
 
 export const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
@@ -54,16 +57,13 @@ export interface MealProps {
 }
 
 interface MealFormProps {
-  handleSubmit(data: z.infer<typeof formSchema>): void;
   method: "post" | "put";
   mealData?: MealProps;
 }
 
-export default function MealForm({
-  handleSubmit,
-  method,
-  mealData,
-}: MealFormProps) {
+export default function MealForm({ method, mealData }: MealFormProps) {
+  const router = useRouter();
+
   const defaultValues = mealData
     ? mealData
     : {
@@ -101,10 +101,38 @@ export default function MealForm({
     setIsWithinDiet(!isWithinDiet);
   }
 
+  async function handleCreateMeal(data: z.infer<typeof formSchema>) {
+    try {
+      const formatDateString = data.date.split("/").reverse().join("-");
+
+      const localDate = new Date(`${formatDateString}T${data.hour}`);
+
+      const adjustDate = new Date(
+        localDate.getTime() - localDate.getTimezoneOffset() * 60000
+      );
+
+      const params = {
+        name: data.name,
+        description: data.description,
+        createdAt: adjustDate.toISOString(),
+        isWithinDiet: data.isWithinDiet,
+      } satisfies CreateMealParams;
+
+      await createMeal(params);
+
+      toast.success("Refeição criada com sucesso!");
+
+      router.push(`/create/feedback?isWithinDiet=${data.isWithinDiet}`);
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Erro ao criar reserva!");
+    }
+  }
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(handleCreateMeal)}
         className="flex flex-col gap-4"
       >
         <FormField

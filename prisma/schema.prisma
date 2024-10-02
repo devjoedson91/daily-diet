@@ -69,7 +69,7 @@ model Meal {
   id           String   @id @default(uuid())
   name         String
   description  String
-  createdAt    DateTime @default(now())
+  createdAt    String
   updatedAt    DateTime @updatedAt
   isWithinDiet Boolean
   userId       String

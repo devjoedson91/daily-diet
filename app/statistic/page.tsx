@@ -14,7 +14,7 @@ export default function Statistic() {
   }
 
   function handleMealNavigation() {
-    router.push("/create-meal");
+    router.push("/create");
   }
 
   return (
