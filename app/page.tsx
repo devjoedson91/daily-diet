@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/dialog";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import GoogleLogo from "@/assets/google.svg";
+import GoogleLogo from "@/assets/google.png";
 import Logo from "@/assets/logo.svg";
 
 export default function Home() {
-  function handleLoginWithGoogleClick() {
-    signIn("google");
+  async function handleLoginWithGoogleClick() {
+    await signIn("google", { callbackUrl: "/statistic" });
   }
 
   return (

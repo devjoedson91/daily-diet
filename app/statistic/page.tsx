@@ -5,9 +5,13 @@ import { Label } from "@/components/ui/label";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Header from "./components/home-header";
+import { useSession } from "next-auth/react";
+import Loading from "@/components/loading";
 
 export default function Statistic() {
   const router = useRouter();
+
+  const { status } = useSession();
 
   function handleDashNavigation() {
     router.push("/statistic/dashboard");
@@ -15,6 +19,14 @@ export default function Statistic() {
 
   function handleMealNavigation() {
     router.push("/create");
+  }
+
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   return (
