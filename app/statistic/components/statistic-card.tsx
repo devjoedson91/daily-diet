@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 interface CardProps {
   className: string;
   description: string;
-  cardValue: string;
+  cardValue: number;
 }
 
 export default function StatisticCard({
