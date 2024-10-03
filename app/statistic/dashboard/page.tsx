@@ -22,7 +22,7 @@ export default async function Dashboard() {
     <div
       className={twMerge(
         "flex flex-col h-screen w-full",
-        perc > 50 ? "bg-green-light" : "bg-red-light"
+        Number.isFinite(perc) && perc > 50 ? "bg-green-light" : "bg-red-light"
       )}
     >
       <Header perc={perc} />
