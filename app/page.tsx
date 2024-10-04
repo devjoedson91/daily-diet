@@ -13,8 +13,8 @@ import GoogleLogo from "@/assets/google.png";
 import Logo from "@/assets/logo.svg";
 
 export default function Home() {
-  async function handleLoginWithGoogleClick() {
-    await signIn("google", { callbackUrl: "/statistic" });
+  function handleLoginWithGoogleClick() {
+    signIn("google", { callbackUrl: "/statistic" });
   }
 
   return (

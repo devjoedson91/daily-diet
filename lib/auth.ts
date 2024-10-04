@@ -20,6 +20,9 @@ export const authOptions: AuthOptions = {
       } as any;
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return baseUrl + "/statistic";
+    },
   },
   secret: process.env.NEXT_AUTH_SECRET,
 };
