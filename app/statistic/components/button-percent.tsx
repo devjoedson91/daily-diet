@@ -24,11 +24,10 @@ export default function ButtonPercent({ perc }: ButtonPercentProps) {
       )}
       onClick={handleDashNavigation}
     >
-      {Number.isFinite(perc) ? (
-        <h1 className="font-bold text-[32px]">{perc.toFixed(2)}%</h1>
-      ) : (
-        <h1 className="text-base font-bold">Carregando...</h1>
-      )}
+      <h1 className="font-bold text-[32px]">
+        {Number.isFinite(perc) ? `${perc.toFixed(2)}%` : "0.00%"}
+      </h1>
+
       <p className="text-base">das refeições dentro da dieta</p>
       <ArrowUpRight
         size={24}

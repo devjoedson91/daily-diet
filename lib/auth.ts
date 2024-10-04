@@ -13,11 +13,22 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      session.user = {
-        ...session.user,
-        id: user.id,
-      } as any;
+    async jwt({ token, account, user }) {
+      if (account && user) {
+        token.id = user.id;
+      }
+
+      return token;
+    },
+    async session({ session, user, token }) {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+
+      // session.user = {
+      //   ...session.user,
+      //   id: user.id,
+      // } as any;
       return session;
     },
     async redirect({ url, baseUrl }) {

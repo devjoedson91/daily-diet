@@ -1,12 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import GoogleLogo from "@/assets/google.png";
@@ -18,21 +12,17 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-5 justify-center h-screen">
-      <div className="relative w-48 h-48">
+    <div className="flex flex-col items-center gap-8 justify-center h-screen">
+      <div className="relative w-52 h-48">
         <Image alt="Logo" src={Logo} fill />
       </div>
 
-      <Dialog>
-        <DialogHeader>
-          <DialogTitle className="text-center text-green-dark font-bold text-xl">
-            Faça login na plataforma
-          </DialogTitle>
-          <DialogDescription>
-            Conecte-se usando sua conta do Google.
-          </DialogDescription>
-        </DialogHeader>
-      </Dialog>
+      <div>
+        <h1 className="text-center text-green-dark font-bold text-xl">
+          Faça login na plataforma
+        </h1>
+        <p>Conecte-se usando sua conta do Google.</p>
+      </div>
 
       <Button
         variant="outline"

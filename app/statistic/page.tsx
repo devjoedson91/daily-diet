@@ -12,7 +12,7 @@ import MealCard from "./components/meal-card";
 import { toast } from "sonner";
 
 export default function Statistic() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
 
   const [mealsWithinDiet, setMealsWithinDiet] = useState<Meal[]>([]);
 
@@ -55,19 +55,19 @@ export default function Statistic() {
   useEffect(() => {
     async function fetch() {
       try {
-        const allMeals = await getMeals();
+        const allMeals = await getMeals(session?.user?.id);
 
-        const withinDiet = await getMealsWithinDiet();
+        const withinDiet = await getMealsWithinDiet(session?.user?.id);
 
-        setMeals(allMeals);
+        setMeals(allMeals as Meal[]);
 
-        setMealsWithinDiet(withinDiet);
+        setMealsWithinDiet(withinDiet as Meal[]);
       } catch (error: any) {
         toast.error("Falha ao buscar refeições no banco de dados");
       }
     }
-    fetch();
-  }, []);
+    session?.user?.id && fetch();
+  }, [session?.user]);
 
   if (status === "loading") {
     return (
@@ -78,7 +78,7 @@ export default function Statistic() {
   }
 
   return (
-    <div className="flex flex-col p-5 gap-8">
+    <div className="relative flex flex-col p-5 gap-8">
       <Header />
 
       <ButtonPercent perc={perc} />
@@ -97,6 +97,8 @@ export default function Statistic() {
           </div>
         ))}
       </div>
+
+      <div className="fixed left-0 bottom-0 bg-gradient-to-t from-white via-white via-30% to-transparent w-full h-12"></div>
     </div>
   );
 }

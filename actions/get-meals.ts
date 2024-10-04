@@ -2,22 +2,34 @@
 
 import { db } from "@/lib/prisma";
 
-export const getMeals = () => {
-  return db.meal.findMany();
-};
+export const getMeals = (userId?: string) => {
+  if (!userId) return;
 
-export const getMealsWithinDiet = () => {
   return db.meal.findMany({
     where: {
-      isWithinDiet: true,
+      userId,
     },
   });
 };
 
-export const getMealsOutsideDiet = () => {
+export const getMealsWithinDiet = (userId?: string) => {
+  if (!userId) return;
+
+  return db.meal.findMany({
+    where: {
+      isWithinDiet: true,
+      userId,
+    },
+  });
+};
+
+export const getMealsOutsideDiet = (userId?: string) => {
+  if (!userId) return;
+
   return db.meal.findMany({
     where: {
       isWithinDiet: false,
+      userId,
     },
   });
 };
