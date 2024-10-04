@@ -114,7 +114,7 @@ export default function MealForm({ method, mealData }: MealFormProps) {
       const params = {
         name: data.name,
         description: data.description,
-        createdAt: adjustDate.toISOString(),
+        createdAt: adjustDate.toISOString().replace(/z/i, ""),
         isWithinDiet: data.isWithinDiet,
       } satisfies CreateMealParams;
 

@@ -9,6 +9,7 @@ import { Meal } from "@prisma/client";
 import ButtonNewMeal from "./components/button-new-meal";
 import ButtonPercent from "./components/button-percent";
 import MealCard from "./components/meal-card";
+import { toast } from "sonner";
 
 export default function Statistic() {
   const { status } = useSession();
@@ -42,8 +43,6 @@ export default function Statistic() {
     (date: string): Meal[] => {
       const formatDate = date.split(".").reverse().join(".");
 
-      console.log("renderizou");
-
       return meals.filter(
         (meal) =>
           new Date(meal.createdAt).toDateString() ===
@@ -55,13 +54,17 @@ export default function Statistic() {
 
   useEffect(() => {
     async function fetch() {
-      const allMeals = await getMeals();
+      try {
+        const allMeals = await getMeals();
 
-      const withinDiet = await getMealsWithinDiet();
+        const withinDiet = await getMealsWithinDiet();
 
-      setMeals(allMeals);
+        setMeals(allMeals);
 
-      setMealsWithinDiet(withinDiet);
+        setMealsWithinDiet(withinDiet);
+      } catch (error: any) {
+        toast.error("Falha ao buscar refeições no banco de dados");
+      }
     }
     fetch();
   }, []);
