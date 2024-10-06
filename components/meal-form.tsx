@@ -52,7 +52,7 @@ export const formSchema = z.object({
 });
 
 interface MealFormProps {
-  meal: Meal;
+  meal?: Meal;
   method: "post" | "put";
 }
 
@@ -60,7 +60,7 @@ export default function MealForm({ method, meal }: MealFormProps) {
   const router = useRouter();
 
   const defaultValues =
-    method === "put"
+    method === "put" && meal
       ? {
           name: meal.name,
           description: meal.description,
@@ -78,7 +78,7 @@ export default function MealForm({ method, meal }: MealFormProps) {
   });
 
   const [isWithinDiet, setIsWithinDiet] = useState(
-    method === "put" ? meal.isWithinDiet : true
+    method === "put" && meal ? meal.isWithinDiet : true
   );
 
   const { setValue, watch } = form;
@@ -131,6 +131,8 @@ export default function MealForm({ method, meal }: MealFormProps) {
   }
 
   async function handleUpdateMeal(data: z.infer<typeof formSchema>) {
+    if (!meal) return;
+
     try {
       const formatDateString = data.date.split("/").reverse().join("-");
 
