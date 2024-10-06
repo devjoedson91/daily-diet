@@ -34,6 +34,10 @@ export default function Statistic() {
           )
         );
       })
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
       .map((item) =>
         new Date(item.createdAt).toLocaleDateString().replace(/\//g, ".")
       );
@@ -98,7 +102,7 @@ export default function Statistic() {
         ))}
       </div>
 
-      <div className="fixed left-0 bottom-0 bg-gradient-to-t from-white via-white via-30% to-transparent w-full h-12"></div>
+      <div className="fixed left-0 bottom-0 bg-gradient-to-t from-white via-white via-30% to-transparent w-full h-10"></div>
     </div>
   );
 }
