@@ -12,7 +12,7 @@ export default function MealCard({ meal }: MealCardProps) {
   const router = useRouter();
 
   function handleNavigation() {
-    router.push("/meal");
+    router.push(`/meal?mealId=${meal.id}`);
   }
 
   return (
@@ -28,9 +28,9 @@ export default function MealCard({ meal }: MealCardProps) {
         <h1 className="text-base">{meal.name}</h1>
       </div>
       {meal.isWithinDiet ? (
-        <CircleCheck strokeWidth={4} className="text-green-mid" size={14} />
+        <CircleCheck strokeWidth={3} className="text-green-mid" size={16} />
       ) : (
-        <CircleX strokeWidth={4} className="text-red-mid" size={14} />
+        <CircleX strokeWidth={3} className="text-red-mid" size={16} />
       )}
     </Button>
   );

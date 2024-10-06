@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,39 +11,99 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CircleCheck, PencilLine, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Meal } from "@prisma/client";
+import { CircleCheck, CircleX, PencilLine, Trash2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { mealById } from "@/actions/get-meals";
+import { format } from "date-fns";
+import { twMerge } from "tailwind-merge";
+import { deleteMeal } from "@/actions/delete-meal";
+import { toast } from "sonner";
 
 export default function Meal() {
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+
+  const mealId = searchParams.get("mealId");
+
+  const [meal, setMeal] = useState<Meal>();
+
+  useEffect(() => {
+    const getMeal = async () => {
+      const response = await mealById(mealId as string);
+
+      setMeal(response as Meal);
+    };
+
+    mealId && getMeal();
+  }, [mealId]);
+
   function handleNavigation() {
-    router.push("/meal/update");
+    if (!meal?.id) return;
+
+    router.push(`/meal/update?mealId=${meal.id}`);
+  }
+
+  async function handleDeleteMeal() {
+    if (!meal?.id) return;
+
+    try {
+      await deleteMeal(meal.id);
+
+      toast.success("Reserva cancelada com sucesso!");
+
+      router.push("/statistic");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao cancelar reserva. Tente novamente.");
+    }
   }
 
   return (
-    <div className="flex flex-col bg-green-light h-screen">
+    <div
+      className={twMerge(
+        "flex flex-col h-screen",
+        meal?.isWithinDiet ? "bg-green-light" : "bg-red-light"
+      )}
+    >
       <Header title="Refeição" />
       <Card className="py-6 bg-white flex-1 rounded-t-3xl">
         <CardContent className="flex flex-col h-full justify-between">
           <div className="flex flex-col gap-4">
             <div>
-              <h1 className="text-xl font-bold">Sanduiche</h1>
-              <p className="text-base">
-                Sanduíche de pão integral com atum e salada de alface e tomate
-              </p>
+              <h1 className="text-xl font-bold">{meal?.name}</h1>
+              <p className="text-base">{meal?.description}</p>
             </div>
             <div>
               <h1 className="text-xl font-bold">Data e hora</h1>
-              <p className="text-base">12/08/2022 às 16:00</p>
+              <p className="text-base">
+                {meal && (
+                  <>
+                    {format(new Date(meal.createdAt), "dd/MM/yyyy")}
+                    &nbsp;ás&nbsp;{format(new Date(meal.createdAt), "HH:mm")}
+                  </>
+                )}
+              </p>
             </div>
-            <Badge
-              variant="outline"
-              className="w-36 h-9 border-none bg-gray-6 flex items-center gap-2"
-            >
-              <CircleCheck size={16} className="text-green-dark" />
-              <h2 className="text-sm text-gray-1">Dentro da dieta</h2>
-            </Badge>
+            {meal && (
+              <Badge
+                variant="outline"
+                className="w-36 h-9 border-none bg-gray-6 flex items-center gap-2"
+              >
+                {meal.isWithinDiet ? (
+                  <>
+                    <CircleCheck size={16} className="text-green-dark" />
+                    <h2 className="text-sm text-gray-1">Dentro da dieta</h2>
+                  </>
+                ) : (
+                  <>
+                    <CircleX size={16} className="text-red-dark" />
+                    <h2 className="text-sm text-gray-1">Fora da dieta</h2>
+                  </>
+                )}
+              </Badge>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <Button
@@ -71,6 +132,7 @@ export default function Meal() {
                   <Button
                     variant="outline"
                     className="bg-gray-2 hover:bg-gray-2/70 h-full text-white text-sm font-bold"
+                    onClick={handleDeleteMeal}
                   >
                     Sim, excluir
                   </Button>

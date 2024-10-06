@@ -12,6 +12,16 @@ export const getMeals = (userId?: string) => {
   });
 };
 
+export const mealById = (mealId: string) => {
+  if (!mealId) return;
+
+  return db.meal.findFirst({
+    where: {
+      id: mealId,
+    },
+  });
+};
+
 export const getMealsWithinDiet = (userId?: string) => {
   if (!userId) return;
 

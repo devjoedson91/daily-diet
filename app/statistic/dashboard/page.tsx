@@ -1,4 +1,6 @@
-import { useMemo } from "react";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "../components/dash-header";
 import StatisticCard from "../components/statistic-card";
@@ -8,15 +10,43 @@ import {
   getMealsWithinDiet,
 } from "@/actions/get-meals";
 import { twMerge } from "tailwind-merge";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { Meal } from "@prisma/client";
 
-export default async function Dashboard() {
-  const meals = await getMeals();
+export default function Dashboard() {
+  const { data: session } = useSession();
 
-  const mealsWithinDiet = await getMealsWithinDiet();
+  const [mealsWithinDiet, setMealsWithinDiet] = useState<Meal[]>([]);
 
-  const mealOutsideDiet = await getMealsOutsideDiet();
+  const [mealsOutsideDiet, setMealsOutsideDiet] = useState<Meal[]>([]);
 
-  const perc: number = (mealsWithinDiet.length / meals.length) * 100;
+  const [meals, setMeals] = useState<Meal[]>([]);
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const allMeals = await getMeals(session?.user?.id);
+
+        const withinDiet = await getMealsWithinDiet(session?.user?.id);
+
+        const outSideDiet = await getMealsOutsideDiet(session?.user?.id);
+
+        setMeals(allMeals as Meal[]);
+
+        setMealsOutsideDiet(outSideDiet as Meal[]);
+
+        setMealsWithinDiet(withinDiet as Meal[]);
+      } catch (error: any) {
+        toast.error("Falha ao buscar refeições no banco de dados");
+      }
+    }
+    session?.user?.id && fetch();
+  }, [session?.user]);
+
+  const perc = useMemo((): number => {
+    return (mealsWithinDiet.length / meals.length) * 100;
+  }, [mealsWithinDiet]);
 
   return (
     <div
@@ -51,7 +81,7 @@ export default async function Dashboard() {
               />
               <StatisticCard
                 className="bg-red-light"
-                cardValue={mealOutsideDiet.length}
+                cardValue={mealsOutsideDiet.length}
                 description="refeições fora da dieta"
               />
             </div>

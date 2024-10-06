@@ -21,6 +21,9 @@ import { formatToDate, formatToTime } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CreateMealParams, createMeal } from "@/actions/create-meal";
 import { toast } from "sonner";
+import { Meal } from "@prisma/client";
+import { format } from "date-fns";
+import { updateMeal } from "@/actions/update-meal";
 
 export const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
@@ -48,28 +51,26 @@ export const formSchema = z.object({
   }),
 });
 
-export interface MealProps {
-  name: string;
-  description: string;
-  date: string;
-  hour: string;
-  isWithinDiet: boolean;
-}
-
 interface MealFormProps {
+  meal: Meal;
   method: "post" | "put";
-  mealData?: MealProps;
 }
 
-export default function MealForm({ method, mealData }: MealFormProps) {
+export default function MealForm({ method, meal }: MealFormProps) {
   const router = useRouter();
 
-  const defaultValues = mealData
-    ? mealData
-    : {
-        hour: "",
-        date: "",
-      };
+  const defaultValues =
+    method === "put"
+      ? {
+          name: meal.name,
+          description: meal.description,
+          date: format(new Date(meal.createdAt), "dd/MM/yyyy"),
+          hour: format(new Date(meal.createdAt), "HH:mm"),
+        }
+      : {
+          hour: "",
+          date: "",
+        };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,7 +78,7 @@ export default function MealForm({ method, mealData }: MealFormProps) {
   });
 
   const [isWithinDiet, setIsWithinDiet] = useState(
-    mealData ? mealData.isWithinDiet : true
+    method === "put" ? meal.isWithinDiet : true
   );
 
   const { setValue, watch } = form;
@@ -129,10 +130,41 @@ export default function MealForm({ method, mealData }: MealFormProps) {
     }
   }
 
+  async function handleUpdateMeal(data: z.infer<typeof formSchema>) {
+    try {
+      const formatDateString = data.date.split("/").reverse().join("-");
+
+      const localDate = new Date(`${formatDateString}T${data.hour}`);
+
+      const adjustDate = new Date(
+        localDate.getTime() - localDate.getTimezoneOffset() * 60000
+      );
+
+      const params = {
+        id: meal.id,
+        name: data.name,
+        description: data.description,
+        createdAt: adjustDate.toISOString().replace(/z/i, ""),
+        isWithinDiet: data.isWithinDiet,
+      } satisfies Omit<Meal, "userId" | "updatedAt">;
+
+      await updateMeal(params);
+
+      toast.success("Refeição editada com sucesso!");
+
+      router.push(`/create/feedback?isWithinDiet=${data.isWithinDiet}`);
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Erro ao criar reserva!");
+    }
+  }
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleCreateMeal)}
+        onSubmit={form.handleSubmit(
+          method === "post" ? handleCreateMeal : handleUpdateMeal
+        )}
         className="flex flex-col gap-4"
       >
         <FormField
