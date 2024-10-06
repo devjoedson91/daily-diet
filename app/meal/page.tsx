@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Meal } from "@prisma/client";
 import { CircleCheck, CircleX, PencilLine, Trash2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mealById } from "@/actions/get-meals";
@@ -19,6 +18,7 @@ import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { deleteMeal } from "@/actions/delete-meal";
 import { toast } from "sonner";
+import { Meal } from "@prisma/client";
 
 export default function Meal() {
   const router = useRouter();
@@ -30,13 +30,13 @@ export default function Meal() {
   const [meal, setMeal] = useState<Meal>();
 
   useEffect(() => {
-    const getMeal = async () => {
+    const fetch = async () => {
       const response = await mealById(mealId as string);
 
       setMeal(response as Meal);
     };
 
-    mealId && getMeal();
+    mealId && fetch();
   }, [mealId]);
 
   function handleNavigation() {
@@ -51,12 +51,12 @@ export default function Meal() {
     try {
       await deleteMeal(meal.id);
 
-      toast.success("Reserva cancelada com sucesso!");
+      toast.success("Refeição removida com sucesso!");
 
       router.push("/statistic");
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao cancelar reserva. Tente novamente.");
+      toast.error("Erro ao remover refeição. Tente novamente.");
     }
   }
 
