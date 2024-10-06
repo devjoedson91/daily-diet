@@ -18,7 +18,7 @@ import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { deleteMeal } from "@/actions/delete-meal";
 import { toast } from "sonner";
-import { Meal } from "@prisma/client";
+import { type Meal } from "@prisma/client";
 
 export default function Meal() {
   const router = useRouter();
