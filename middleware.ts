@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(request: NextRequest) {
   const currentUser = request.cookies.get(
-    "next-auth.session-token" ?? "__Secure-next-auth.session-token"
+    "__Secure-next-auth.session-token"
   )?.value;
 
   // Se o usuário estiver autenticado e tentar acessar a página de login, redirecioná-lo para o dashboard
