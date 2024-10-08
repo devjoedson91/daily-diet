@@ -13,26 +13,12 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account, user }) {
-      if (account && user) {
-        token.id = user.id;
-      }
-
-      return token;
-    },
     async session({ session, user, token }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
-
-      // session.user = {
-      //   ...session.user,
-      //   id: user.id,
-      // } as any;
+      session.user = {
+        ...session.user,
+        id: user.id,
+      } as any;
       return session;
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl + "/statistic";
     },
   },
   secret: process.env.NEXT_AUTH_SECRET,
