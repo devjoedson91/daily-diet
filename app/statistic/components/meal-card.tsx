@@ -20,12 +20,14 @@ export default function MealCard({ meal }: MealCardProps) {
       className="border w-full h-12 flex hover:bg-gray-6/50 items-center justify-between text-gray-1"
       onClick={handleNavigation}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 max-w-[90%]">
         <span className="font-bold text-xs">
           {format(new Date(meal.createdAt), "HH:mm")}
         </span>
         <span>|</span>
-        <h1 className="text-base">{meal.name}</h1>
+        <h1 className="text-base overflow-hidden text-ellipsis whitespace-nowrap">
+          {meal.name}
+        </h1>
       </div>
       {meal.isWithinDiet ? (
         <CircleCheck strokeWidth={3} className="text-green-mid" size={16} />
