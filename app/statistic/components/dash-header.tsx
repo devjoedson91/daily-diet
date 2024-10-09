@@ -41,7 +41,9 @@ export default function DashHeader({ perc }: DashHeaderProps) {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <h1 className="font-bold text-[32px]">{percCounter.toFixed(2)}%</h1>
+        <h1 className="font-bold text-[32px]">
+          {percCounter < 100 ? `${percCounter.toFixed(2)}%` : `${percCounter}%`}
+        </h1>
         <p className="text-base">das refeições dentro da dieta</p>
       </div>
     </div>

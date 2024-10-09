@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(request: NextRequest) {
@@ -23,3 +22,5 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/", "/statistic/:path*", "/create/:path*", "/meal/:path"],
 };
+
+// next-auth.session-token

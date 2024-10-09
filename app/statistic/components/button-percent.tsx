@@ -40,7 +40,7 @@ export default function ButtonPercent({ perc }: ButtonPercentProps) {
       variant="outline"
       className={twMerge(
         "relative h-24 flex flex-col items-center justify-center gap-2 transition duration-1000",
-        percCounter > 50 ? "bg-green-light" : "bg-red-light"
+        Number(percCounter.toFixed(2)) > 50 ? "bg-green-light" : "bg-red-light"
       )}
       onClick={handleDashNavigation}
     >
@@ -53,7 +53,9 @@ export default function ButtonPercent({ perc }: ButtonPercentProps) {
         size={24}
         className={twMerge(
           "absolute top-2 right-2",
-          percCounter > 50 ? "text-green-dark" : "text-red-dark"
+          Number(percCounter.toFixed(2)) > 50
+            ? "text-green-dark"
+            : "text-red-dark"
         )}
       />
     </Button>

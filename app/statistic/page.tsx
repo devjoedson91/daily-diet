@@ -38,19 +38,15 @@ export default function Statistic() {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
-      .map((item) =>
-        new Date(item.createdAt).toLocaleDateString().replace(/\//g, ".")
-      );
+      .map((item) => item.createdAt);
   }, [meals]);
 
   const listMealsByDate = useCallback(
     (date: string): Meal[] => {
-      const formatDate = date.split(".").reverse().join(".");
-
       return meals.filter(
         (meal) =>
           new Date(meal.createdAt).toDateString() ===
-          new Date(formatDate).toDateString()
+          new Date(date).toDateString()
       );
     },
     [uniqueDatesMeals]
@@ -92,7 +88,9 @@ export default function Statistic() {
       <div className="flex flex-col gap-5">
         {uniqueDatesMeals.map((item) => (
           <div key={item} className="flex flex-col">
-            <h1 className="text-gray-1 font-bold text-lg mb-2">{item}</h1>
+            <h1 className="text-gray-1 font-bold text-lg mb-2">
+              {new Date(item).toLocaleDateString().replace(/\//g, ".")}
+            </h1>
             <div className="flex flex-col gap-2">
               {listMealsByDate(item).map((meal) => (
                 <MealCard key={meal.id} meal={meal} />

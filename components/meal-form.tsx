@@ -27,9 +27,7 @@ import { updateMeal } from "@/actions/update-meal";
 
 export const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
-  description: z
-    .string({ message: "Descreva brevemente a refeição" })
-    .min(1, { message: "Descreva brevemente a refeição" }),
+  description: z.string().optional(),
   date: z
     .string({ message: "Informe a data da refeição" })
     .min(1, { message: "Informe a data da refeição" })
@@ -259,12 +257,10 @@ export default function MealForm({ method, meal }: MealFormProps) {
 
         <Button
           variant="outline"
-          className="flex mt-2 items-center justify-center gap-2 bg-gray-2 hover:bg-gray-2/70 w-full h-12 text-white"
+          className="flex mt-2 text-base items-center justify-center gap-2 bg-gray-2 hover:bg-gray-2/70 w-full h-12 text-white"
           type="submit"
         >
-          <h2>
-            {method === "post" ? "Cadastrar refeição" : "Salvar alterações"}
-          </h2>
+          {method === "post" ? "Cadastrar refeição" : "Salvar alterações"}
         </Button>
       </form>
     </Form>

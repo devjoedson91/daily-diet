@@ -30,7 +30,7 @@ export default function HomeHeader() {
               <AvatarImage src={session.user.image} />
             </Avatar>
           </PopoverTrigger>
-          <PopoverContent className="bg-white mr-2">
+          <PopoverContent className="bg-white mr-2 h-14 border-none">
             <Button
               className="flex items-center gap-2 w-full h-full"
               onClick={handleLogout}
