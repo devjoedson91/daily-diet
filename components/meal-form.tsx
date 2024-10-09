@@ -27,7 +27,9 @@ import { updateMeal } from "@/actions/update-meal";
 
 export const formSchema = z.object({
   name: z.string({ message: "Informe o nome da refeição" }),
-  description: z.string().optional(),
+  description: z
+    .string({ message: "Descreva brevemente a refeição" })
+    .min(1, { message: "Descreva brevemente a refeição" }),
   date: z
     .string({ message: "Informe a data da refeição" })
     .min(1, { message: "Informe a data da refeição" })
