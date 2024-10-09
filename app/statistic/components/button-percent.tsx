@@ -22,14 +22,14 @@ export default function ButtonPercent({ perc }: ButtonPercentProps) {
       const interval = setInterval(() => {
         setPercCounter((prevCounter) => {
           if (prevCounter < perc) {
-            return Math.min(prevCounter + 0.1, 100);
+            return Math.round(Math.min(prevCounter + 0.1, 100) * 100) / 100;
           } else {
             clearInterval(interval);
 
             return prevCounter;
           }
         });
-      }, 5);
+      }, 10);
 
       return () => clearInterval(interval);
     }
@@ -44,9 +44,7 @@ export default function ButtonPercent({ perc }: ButtonPercentProps) {
       )}
       onClick={handleDashNavigation}
     >
-      <h1 className="font-bold text-[32px]">
-        {percCounter < 100 ? `${percCounter.toFixed(2)}%` : `${percCounter}%`}
-      </h1>
+      <h1 className="font-bold text-[32px]">{percCounter}%</h1>
 
       <p className="text-base">das refeições dentro da dieta</p>
       <ArrowUpRight
