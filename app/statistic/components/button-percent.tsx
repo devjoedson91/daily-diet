@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,29 +11,33 @@ interface ButtonPercentProps {
 export default function ButtonPercent({ perc }: ButtonPercentProps) {
   const router = useRouter();
 
-  const [percCounter, setPercCounter] = useState(0);
+  // const [percCounter, setPercCounter] = useState(0);
 
   function handleDashNavigation() {
     router.push("/statistic/dashboard");
   }
 
-  useEffect(() => {
-    if (Number.isFinite(perc)) {
-      const interval = setInterval(() => {
-        setPercCounter((prevCounter) => {
-          if (prevCounter < perc) {
-            return Math.round(Math.min(prevCounter + 0.1, 100) * 100) / 100;
-          } else {
-            clearInterval(interval);
+  const percCounter = Number.isFinite(perc)
+    ? Math.round(Math.min(perc) * 100) / 100
+    : 0;
 
-            return prevCounter;
-          }
-        });
-      }, 10);
+  // useEffect(() => {
+  //   if (Number.isFinite(perc)) {
+  //     const interval = setInterval(() => {
+  //       setPercCounter((prevCounter) => {
+  //         if (prevCounter < perc) {
+  //           return Math.round(Math.min(prevCounter + 0.1, 100) * 100) / 100;
+  //         } else {
+  //           clearInterval(interval);
 
-      return () => clearInterval(interval);
-    }
-  }, [perc]);
+  //           return prevCounter;
+  //         }
+  //       });
+  //     }, 10);
+
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [perc]);
 
   return (
     <Button
